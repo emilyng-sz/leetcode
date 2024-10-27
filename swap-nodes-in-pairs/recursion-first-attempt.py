@@ -1,5 +1,7 @@
 # Working Solution
 
+## Can consider implementing iteration
+
 from typing import Optional
 
 # Definition for singly-linked list.
