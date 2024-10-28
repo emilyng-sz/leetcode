@@ -28,7 +28,6 @@ class Solution:
 
 if __name__ == '__main__':
     # run a test case
-    print(1 is (1,))
     nums = [1] #[0,1,2,2,3,0,4,2]
     val = 1
     s = Solution()
