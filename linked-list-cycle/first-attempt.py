@@ -16,4 +16,4 @@ class Solution:
             else:
                 return True
             head = head.next
-        return False 
+        return False  
