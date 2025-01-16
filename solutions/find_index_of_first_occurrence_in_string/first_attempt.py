@@ -3,7 +3,7 @@
 ## In this case, it would be better to use string slicing instead of hashmap, since the time complexity is the same
 
 class Solution:
-    def strStr(self, haystack: str, needle: str) -> int:
+    def substring(self, haystack: str, needle: str) -> int:
         n = len(needle)
         h_n = len(haystack)
         starting_chara = needle[0]
@@ -15,11 +15,20 @@ class Solution:
                 if needle in h:
                     return h[needle]
         return -1 
-
-if __name__ == '__main__':
-    # run a test case
-    hs = "sadbutsad"
-    n = "sad"
-    s = Solution()
-    l = s.strStr(hs, n)
-    print(l)
+    
+    def bruteforce(self, haystack, needle):
+        first_letter = needle[0]
+        needle_len = len(needle)
+        for i in range(len(haystack)):
+            if haystack[i] == first_letter:
+                counter = 0
+                matches = False
+                while counter < needle_len and i+counter < len(haystack):
+                    matches = True
+                    if haystack[i+counter] != needle[counter]:
+                        matches = False
+                        exit
+                    counter += 1
+                if matches == True:
+                    return i
+        return -1
