@@ -1,0 +1,61 @@
+name: Pytest Runs
+
+on:
+  push:
+    branches:
+      - '**' 
+  pull_request:
+    branches: 
+      - '**'
+
+jobs:
+  pytest_runs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check current working directory
+      run: |
+        echo "$PWD" 
+
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9  # Specify Python version
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+
+    - name: Compare number of files in solutions/ and tests/
+      run: |
+        # Compare number of files in `solutions/` and `tests/`
+
+        ## Count files
+        solution_count=$(ls -1 ${{github.workspace}}/solutions/ | grep -v "^__" | wc -l)
+        test_count=$(ls -1 ${{github.workspace}}/tests/ | grep "^test" | wc -l)
+
+        echo "Solutions folder file count: $solution_count"
+        echo "Tests folder file count: $test_count"
+
+        ## Compare counts
+        if [ "$solution_count" -ne "$test_count" ]; then
+          echo "::warning::Mismatch detected: Solutions ($solution_count), Tests ($test_count). Please update the folders respectively."
+        else
+          echo "File counts match. No issues detected."
+        fi
+
+    - name: Run tests
+      run: pytest tests/ 
+      continue-on-error: false
+
+    - name: Display Success Message
+      if: success()
+      run: echo "::notice::🎉 All tests passed successfully!"
+
+    - name: Display Failure Message
+      if: failure()
+      run: echo "::warning::❌ Some tests failed. Please fix them before pushing."
