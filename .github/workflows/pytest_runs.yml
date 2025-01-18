@@ -13,8 +13,8 @@ jobs:
     - name: Check mismatch files in solutions/ and tests/
       run: |
         # Count files in `solutions/` and `tests/`
-        solution_count=$(ls -1 solutions/ | grep -v "^__" | wc -l)
-        test_count=$(ls -1 tests/ | grep "^test" | wc -l)
+        solution_count=$(ls -1 ${{github.workspace}}/solutions/ | grep -v "^__" | wc -l)
+        test_count=$(ls -1 ${{github.workspace}}/tests/ | grep "^test" | wc -l)
 
         echo "Solutions folder file count: $solution_count"
         echo "Tests folder file count: $test_count"
@@ -25,7 +25,7 @@ jobs:
         else
           echo "File counts match. No issues detected."
         fi
-        
+
   pytest_runs:
     runs-on: ubuntu-latest
 
@@ -49,8 +49,20 @@ jobs:
 
     - name: Display Success Message
       if: success()
-      run: echo "🎉 All tests passed successfully!"
+      run: echo "::notice::🎉 All tests passed successfully!"
 
     - name: Display Failure Message
       if: failure()
       run: echo "❌ Some tests failed. Please fix them before pushing."
+
+    - name: Post Success Comment
+      if: success()
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: "🎉 All tests passed successfully"
+          })
