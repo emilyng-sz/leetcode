@@ -13,8 +13,9 @@ jobs:
 
     steps:
     - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
+      run: |
+        ls ${{ github.workspace }}
+
     - name: Check mismatch files in solutions/ and tests/
       run: |
         # Count files in `solutions/` and `tests/`
