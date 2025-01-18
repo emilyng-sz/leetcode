@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Check current working directory
+      run: |
+        echo "$PWD"  
+
     - name: List files in the repository
       run: |
         ls ${{ github.workspace }}
