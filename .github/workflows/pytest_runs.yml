@@ -12,11 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
     - name: Check mismatch files in solutions/ and tests/
       run: |
         # Count files in `solutions/` and `tests/`
-        ls -1 ${{github.workspace}}
-        ls ${{github.workspace}}
         solution_count=$(ls -1 ${{github.workspace}}/solutions/ | grep -v "^__" | wc -l)
         test_count=$(ls -1 ${{github.workspace}}/tests/ | grep "^test" | wc -l)
 
