@@ -3,23 +3,12 @@ name: Pytest Runs
 on:
   push:
     branches:
-      - github_actions  
+      - '**' 
   pull_request:
-    branches: github_actions
+    branches: 
+      - '**'
 
 jobs:
-  count_solutions_and_tests:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Check current working directory
-      run: |
-        echo "$PWD"  
-
-    - name: List files in the repository
-      run: |
-        ls 
-
   pytest_runs:
     runs-on: ubuntu-latest
 
@@ -41,24 +30,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install pytest
 
-    - name: Check current working directory
+    - name: Compare number of files in solutions/ and tests/
       run: |
-        echo "$PWD"  
+        # Compare number of files in `solutions/` and `tests/`
 
-    - name: List files in the repository
-      run: |
-        ls ${{ github.workspace }}
-
-    - name: Check mismatch files in solutions/ and tests/
-      run: |
-        # Count files in `solutions/` and `tests/`
+        ## Count files
         solution_count=$(ls -1 ${{github.workspace}}/solutions/ | grep -v "^__" | wc -l)
         test_count=$(ls -1 ${{github.workspace}}/tests/ | grep "^test" | wc -l)
 
         echo "Solutions folder file count: $solution_count"
         echo "Tests folder file count: $test_count"
 
-        # Compare counts
+        ## Compare counts
         if [ "$solution_count" -ne "$test_count" ]; then
           echo "::warning::Mismatch detected: Solutions ($solution_count), Tests ($test_count). Please update the folders respectively."
         else
