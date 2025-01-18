@@ -3,7 +3,9 @@ name: Pytest Runs
 on:
   push:
     branches:
-      - github_actions  # Run tests on pushes to the github_actions branch to test
+      - github_actions  
+  pull_request:
+    branches: github_actions
 
 jobs:
   count_solutions_and_tests:
@@ -13,6 +15,9 @@ jobs:
     - name: Check mismatch files in solutions/ and tests/
       run: |
         # Count files in `solutions/` and `tests/`
+        ls -1 ${{github.workspace}}
+        ls ${{github.workspace}}
+        ls -1 ${{github.workspace}}/../tests/
         solution_count=$(ls -1 ${{github.workspace}}/solutions/ | grep -v "^__" | wc -l)
         test_count=$(ls -1 ${{github.workspace}}/tests/ | grep "^test" | wc -l)
 
@@ -53,16 +58,4 @@ jobs:
 
     - name: Display Failure Message
       if: failure()
-      run: echo "❌ Some tests failed. Please fix them before pushing."
-
-    - name: Post Success Comment
-      if: success()
-      uses: actions/github-script@v6
-      with:
-        script: |
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: "🎉 All tests passed successfully"
-          })
+      run: echo "::warning::❌ Some tests failed. Please fix them before pushing."
