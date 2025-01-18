@@ -1,6 +1,8 @@
 # leetcode
 
-This is a repository for my leetcode solutions with additional unit testing using `pytest` and GitHub Actions for CI/CD.
+This is a repository for my leetcode solutions with additional unit testing using `pytest` library and GitHub Actions for CI/CD.
+
+The repository will continously be updated with new solutions and tests as I progress through leetcode problems and interview preparations.
 
 ## File Directory
 
