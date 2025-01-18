@@ -6,7 +6,7 @@ on:
       - github_actions  # Run tests on pushes to the github_actions branch to test
 
 jobs:
-  test:
+  Pytest Runs:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,8 +26,8 @@ jobs:
     - name: Check mismatch files in solutions/ and tests/
       run: |
         # Count files in `solutions/` and `tests/`
-        solution_count=$(find solutions/ -maxdepth 1 -type f | wc -l)
-        test_count=$(find tests/ -maxdepth 1 -type f | wc -l)
+        solution_count=$(ls -1 solutions/ | grep -v "^__" | wc -l)
+        test_count=$(ls -1 tests/ | grep "^test" | wc -l)
 
         echo "Solutions folder file count: $solution_count"
         echo "Tests folder file count: $test_count"
@@ -42,6 +42,10 @@ jobs:
     - name: Run tests
       run: pytest tests/ 
       continue-on-error: false
+
+    - name: Display Success Message
+      if: success()
+      run: echo "🎉 All tests passed successfully!"
 
     - name: Display Failure Message
       if: failure()
