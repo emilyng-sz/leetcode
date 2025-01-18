@@ -18,28 +18,16 @@ jobs:
 
     - name: List files in the repository
       run: |
-        ls ${{ github.workspace }}
-
-    - name: Check mismatch files in solutions/ and tests/
-      run: |
-        # Count files in `solutions/` and `tests/`
-        solution_count=$(ls -1 ${{github.workspace}}/solutions/ | grep -v "^__" | wc -l)
-        test_count=$(ls -1 ${{github.workspace}}/tests/ | grep "^test" | wc -l)
-
-        echo "Solutions folder file count: $solution_count"
-        echo "Tests folder file count: $test_count"
-
-        # Compare counts
-        if [ "$solution_count" -ne "$test_count" ]; then
-          echo "::warning::Mismatch detected: Solutions ($solution_count), Tests ($test_count)"
-        else
-          echo "File counts match. No issues detected."
-        fi
+        ls 
 
   pytest_runs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Check current working directory
+      run: |
+        echo "$PWD" 
+
     - name: Checkout repository
       uses: actions/checkout@v3
 
@@ -52,6 +40,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pytest
+
+    - name: Check current working directory
+      run: |
+        echo "$PWD"  
 
     - name: List files in the repository
       run: |
@@ -68,11 +60,10 @@ jobs:
 
         # Compare counts
         if [ "$solution_count" -ne "$test_count" ]; then
-          echo "::warning::Mismatch detected: Solutions ($solution_count), Tests ($test_count)"
+          echo "::warning::Mismatch detected: Solutions ($solution_count), Tests ($test_count). Please update the folders respectively."
         else
           echo "File counts match. No issues detected."
         fi
-
 
     - name: Run tests
       run: pytest tests/ 
