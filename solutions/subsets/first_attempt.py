@@ -16,6 +16,7 @@ class Solution:
                 for i in range(len(nums)):
                     helper(nums[:i]+nums[i+1:])
         helper(nums)
+        lst.append([])
         return lst
     '''
         # [1,2,3] -> [1], [2], [3] -> call([1)

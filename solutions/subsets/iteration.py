@@ -6,6 +6,8 @@ class Solution:
         result = [[]]
         for num in nums:
             print(result)
+            # loop in loop, where inner loop loops over an inrementing list (result)
+            # since result is initialised with [] empty list, num will always be added to result, to achieve subset of 1 element
             result += [curr + [num] for curr in result]
         return result
     
